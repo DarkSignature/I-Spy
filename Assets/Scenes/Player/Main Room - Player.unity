@@ -171,8 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5c333a2bf6a93a46991a03a47925947, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gazeTime: 2
-  progressImage: {fileID: 0}
+  progressImage: {fileID: 7851771022884217771, guid: a416c855d789db842872f040ec4ef9e8, type: 3}
 --- !u!114 &312916467
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -403,7 +402,7 @@ GameObject:
   - component: {fileID: 620291719}
   - component: {fileID: 620291721}
   - component: {fileID: 620291720}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -538,7 +537,7 @@ GameObject:
   - component: {fileID: 707400693}
   - component: {fileID: 707400692}
   - component: {fileID: 707400691}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Button_HowTo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -658,7 +657,7 @@ GameObject:
   - component: {fileID: 738459383}
   - component: {fileID: 738459385}
   - component: {fileID: 738459384}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -793,7 +792,7 @@ GameObject:
   - component: {fileID: 761503393}
   - component: {fileID: 761503392}
   - component: {fileID: 761503391}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Button_Exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1007,7 +1006,7 @@ GameObject:
   - component: {fileID: 833316486}
   - component: {fileID: 833316488}
   - component: {fileID: 833316487}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Main_Menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1086,7 +1085,7 @@ GameObject:
   - component: {fileID: 1225071845}
   - component: {fileID: 1225071847}
   - component: {fileID: 1225071846}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1220,7 +1219,7 @@ GameObject:
   - component: {fileID: 1273254292}
   - component: {fileID: 1273254294}
   - component: {fileID: 1273254293}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Text_Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1433,7 +1432,10 @@ GameObject:
   - component: {fileID: 2015622195}
   - component: {fileID: 2015622194}
   - component: {fileID: 2015622193}
-  m_Layer: 5
+  - component: {fileID: 2015622196}
+  - component: {fileID: 2015622197}
+  - component: {fileID: 2015622198}
+  m_Layer: 3
   m_Name: Button_Start
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1542,6 +1544,57 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2015622191}
   m_CullTransparentMesh: 1
+--- !u!114 &2015622196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2015622191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ed677a37fa01404cad6b0aac954f05b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2015622197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2015622191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 0, b: 0, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!65 &2015622198
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2015622191}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0, y: 1, z: 0}
+  m_Center: {x: -0.50000334, y: 0, z: -23.57892}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
