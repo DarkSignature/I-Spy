@@ -4,10 +4,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 
 public class MainNetwork : MonoBehaviourPunCallbacks
 {
     // Start is called before the first frame update
+    public static MainNetwork Instance;
+
+    void Awake()
+    {
+        Instance = this;
+    }
     void Start()
     {
         Debug.Log("Connecting");
@@ -24,9 +31,9 @@ public class MainNetwork : MonoBehaviourPunCallbacks
         Debug.Log("Players in room: " + PhotonNetwork.PlayerList.Length);
     }
 
-    public void CreateRoom()
+    public void JoinOrCreateRoom(String roomName)
     {
-        PhotonNetwork.JoinOrCreateRoom("VR Room " + Random.Range(1000, 9999), new RoomOptions{ MaxPlayers = 4}, null);
+        PhotonNetwork.JoinOrCreateRoom(roomName, new RoomOptions{ MaxPlayers = 5}, null);
     }
     // Update is called once per frame
     void Update()

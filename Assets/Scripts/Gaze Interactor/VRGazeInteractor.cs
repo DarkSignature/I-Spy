@@ -15,7 +15,7 @@ public class VRGazeInteractor : MonoBehaviour
             new Ray(transform.position, transform.forward);
         
         RaycastHit hit;
-
+        
         if(Physics.Raycast(ray, out hit))
         {
             Debug.Log(hit.collider.name);

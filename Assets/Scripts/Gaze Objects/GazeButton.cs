@@ -5,12 +5,12 @@ using UnityEngine.UI;
 
 public class GazeButton : GazeInteractable
 {
-    private Outline outline;
+
     private Button button;
 
-    void Start()
+    protected override void Start()
     {
-        outline = GetComponent<Outline>();
+        base.Start();
         button = GetComponent<Button>();
 
         outline.enabled = false;
@@ -18,6 +18,7 @@ public class GazeButton : GazeInteractable
 
     public override void OnGazeEnter()
     {
+        Debug.Log("Gaze Entered");
         outline.enabled = true;
     }
 

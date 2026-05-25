@@ -24,6 +24,8 @@ public class RoomListManager : MonoBehaviourPunCallbacks
             GameObject card =
                 Instantiate(roomCardPrefab, contentParent);
 
+            card.transform.localScale = Vector3.one;
+            
             card.GetComponent<RoomCard>()
                 .Setup(room);
 

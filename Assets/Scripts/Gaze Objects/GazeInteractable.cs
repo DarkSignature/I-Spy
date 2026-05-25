@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class GazeInteractable : MonoBehaviour
 {
-    private Outline outline;
+    protected Outline outline;
 
-    void Start()
+    protected virtual void Start()
     {
         outline = GetComponent<Outline>();
         outline.enabled = false;
