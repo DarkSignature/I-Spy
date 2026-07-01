@@ -8,75 +8,87 @@ using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviourPunCallbacks
+public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
 
-    public TMP_Text scoreboard;
-    public int round = 0;
+    public GameState CurrentState;
 
-    Dictionary<int, int> scores = new Dictionary<int, int>();
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-
+        Instance = this;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        StartRound();
     }
 
-    public override void OnJoinedRoom()
+    public void SetState(GameState newState)
     {
-        foreach (Player player in PhotonNetwork.PlayerList)
+        CurrentState = newState;
+
+        Debug.Log("State Changed: " + newState);
+
+        switch(newState)
         {
-            if (!scores.ContainsKey(player.ActorNumber))
-            {
-                scores.Add(player.ActorNumber, 0);
-            }
-        }
+            case GameState.Animation:
+                EnterAnimation();
+                break;
 
-        UpdateScoreboard();
+            case GameState.Answering:
+                EnterAnswering();
+                break;
+
+            case GameState.Reveal:
+                EnterReveal();
+                break;
+        }
     }
 
-    public override void OnPlayerLeftRoom(Player otherPlayer)
+    public void StartRound()
     {
-        if (scores.ContainsKey(otherPlayer.ActorNumber))
-        {
-            scores.Remove(otherPlayer.ActorNumber);
-        }
-
-        UpdateScoreboard();
+        SetState(GameState.Animation);
     }
 
-    public override void OnPlayerEnteredRoom(Player newPlayer)
+    private void EnterAnimation()
     {
-        if (!scores.ContainsKey(newPlayer.ActorNumber))
-        {
-            scores.Add(newPlayer.ActorNumber, 0);
-        }
+        Debug.Log("Playing Animation");
 
-        UpdateScoreboard();
+        // Show animation UI
+        WaitingRoomUI.Instance.ShowQuestion();
+
+        Invoke(nameof(AnimationFinished), 5f);
     }
 
-    void UpdateScoreboard()
+    public void AnimationFinished()
     {
-        scoreboard.text = "Ranking\n";
+        SetState(GameState.Answering);
+    }
 
-        foreach (var entry in scores)
-        {
-            int actorNumber = entry.Key;
-            int score = entry.Value;
+    private void EnterAnswering()
+    {
+        Debug.Log("Players can answer now");
 
-            if (PhotonNetwork.CurrentRoom.Players.TryGetValue(actorNumber, out Player player))
-            {
-                if(player.NickName == "")
-                {
-                    player.NickName = "Player " + actorNumber;
-                }
-                scoreboard.text += player.NickName + " - " + score + "\n";
-            }
-        }
+        Invoke(nameof(TimerFinished), 10f);
+    }
+
+    public void TimerFinished()
+    {
+        SetState(GameState.Reveal);
+    }
+
+    private void EnterReveal()
+    {
+        Debug.Log("Showing Answer");
+
+        Invoke(nameof(EndRound), 5f);
+    }
+
+    public void EndRound()
+    {
+        Debug.Log("Round End");
+
+        StartRound();
     }
 }

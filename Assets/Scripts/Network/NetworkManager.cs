@@ -1,32 +1,45 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
+    public static NetworkManager Instance;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        PhotonNetwork.ConnectUsingSettings();        
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
-    public override void OnConnectedToMaster(){
+    private void Start()
+    {
+        if (!PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
+    }
+
+    public override void OnConnectedToMaster()
+    {
         Debug.Log("Connected to Photon!");
-        PhotonNetwork.JoinOrCreateRoom("VRRoom1", new RoomOptions{ MaxPlayers = 4}, null);
+
+        PhotonNetwork.JoinOrCreateRoom(
+            "VRRoom1",
+            new RoomOptions { MaxPlayers = 4 },
+            null
+        );
     }
 
-    public override void OnJoinedRoom(){
+    public override void OnJoinedRoom()
+    {
         Debug.Log("Joined Room!");
         Debug.Log("Players in room: " + PhotonNetwork.PlayerList.Length);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

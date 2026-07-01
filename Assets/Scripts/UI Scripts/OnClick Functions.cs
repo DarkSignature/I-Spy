@@ -22,9 +22,11 @@ public class OnClickFunctions : MonoBehaviourPunCallbacks
         if(RoomManager.active_rooms >= 3)
         {
             UIManager.ShowNotification("There is already 3 active rooms. Please wait for them to finish before creating a new one.");
+            return;
         }
         Debug.Log("Create Room clicked");
-        NetworkManager.JoinOrCreateRoom("VR Room " + Random.Range(1000, 9999));
+        MainNetwork.Instance.JoinOrCreateRoom("VR Room " + Random.Range(1000, 9999));
+
     }
 
     public void ToggleRoomPanel()
