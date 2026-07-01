@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     public GameState CurrentState;
+    private Question currentQuestion;
 
     private void Awake()
     {
@@ -33,7 +34,8 @@ public class GameManager : MonoBehaviour
         switch(newState)
         {
             case GameState.Animation:
-                EnterAnimation();
+                currentQuestion = QuestionManager.Instance.GetRandomQuestion();
+                EnterAnimation(currentQuestion);
                 break;
 
             case GameState.Answering:
@@ -51,12 +53,12 @@ public class GameManager : MonoBehaviour
         SetState(GameState.Animation);
     }
 
-    private void EnterAnimation()
+    private void EnterAnimation(Question currentQuestion)
     {
         Debug.Log("Playing Animation");
 
         // Show animation UI
-        WaitingRoomUI.Instance.ShowQuestion();
+        WaitingRoomUI.Instance.ShowQuestion(currentQuestion);
 
         Invoke(nameof(AnimationFinished), 5f);
     }

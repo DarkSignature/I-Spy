@@ -12,6 +12,7 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
      public Image fadeImage;
      public Animator animator;
      public GameObject question;
+     public TMP_Text questionText;
     void Awake()
     {
         Instance = this;
@@ -23,8 +24,9 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
         questionPanel.SetActive(true);
     }
 
-    public void ShowQuestion()
+    public void ShowQuestion(Question currentQuestion)
     {
+        questionText.text = currentQuestion.questionText;
         StartCoroutine(ShowQuestionRoutine());
     }
 
@@ -58,10 +60,19 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
 
         // 2. show UI at black screen
         question.SetActive(true);
-        animator.Play("QuestionPopup");
+        animator.Play("DefaultQuestion");
 
-        // 3. wait until animation finishes
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("DefaultQuestion"))
+        {
+            yield return null;
+        }
+
+        animator.Play("QuestionPopup", 0, 0f);
+
+        yield return null;
+
+        AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
+        yield return new WaitForSeconds(state.length + 1.5f);
 
         // 4. fade back in
         yield return StartCoroutine(Fade(1f, 0f, 1f));

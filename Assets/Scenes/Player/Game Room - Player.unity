@@ -715,7 +715,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -152.00009, y: -1}
+  m_AnchoredPosition: {x: -141, y: -3}
   m_SizeDelta: {x: -489.68, y: -32.28}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &182058107
@@ -865,6 +865,7 @@ GameObject:
   - component: {fileID: 465222299}
   - component: {fileID: 465222298}
   - component: {fileID: 465222297}
+  - component: {fileID: 465222302}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -971,6 +972,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &465222302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 465222296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1bfbe600b798cb42b614401a27bcedf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  questionBank:
+  - questionText: What animal lays eggs?
+    correctAnimalID: 0
+    used: 0
+  - questionText: What animal is the fastest?
+    correctAnimalID: 0
+    used: 0
+  - questionText: What animal hunts in the night?
+    correctAnimalID: 0
+    used: 0
 --- !u!1 &495392311
 GameObject:
   m_ObjectHideFlags: 0
@@ -2044,6 +2067,7 @@ MonoBehaviour:
   fadeImage: {fileID: 2049301833}
   animator: {fileID: 1836809513}
   question: {fileID: 1023220896}
+  questionText: {fileID: 129614475}
 --- !u!1 &1274345492
 GameObject:
   m_ObjectHideFlags: 0
@@ -3614,15 +3638,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2049301831}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.3815699, y: 2.3815699, z: 2.3815699}
+  m_LocalPosition: {x: 0, y: 0, z: 727}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1631787551}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -300, y: -300}
+  m_AnchoredPosition: {x: -2908, y: -1874}
   m_SizeDelta: {x: 600, y: 600}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &2049301833
