@@ -8,20 +8,52 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
     public GameObject revealPanel;
     public GameObject waitingRoomPanel;
     public GameObject questionPanel;
+    public GameObject resultPanel;
+    public Button nextQuestionButton;
+    public Button endGameButton;
+    public Button startGameButton;
+    public TMP_Text adminStatusText;
+    
     public static WaitingRoomUI Instance;
      public Image fadeImage;
      public Animator animator;
      public GameObject question;
      public TMP_Text questionText;
+     
     void Awake()
     {
         Instance = this;
     }
+    
     void Start()
     {
         revealPanel.SetActive(false);
         waitingRoomPanel.SetActive(false);
         questionPanel.SetActive(true);
+        
+        if (resultPanel != null)
+            resultPanel.SetActive(false);
+        
+        UpdateAdminUI();
+    }
+    
+    void UpdateAdminUI()
+    {
+        // Update admin status display
+        if (adminStatusText != null)
+        {
+            adminStatusText.text = MainNetwork.IsAdmin ? "👑 ADMIN" : "PLAYER";
+        }
+        
+        // Enable/disable admin buttons based on role
+        if (startGameButton != null)
+            startGameButton.interactable = MainNetwork.IsAdmin;
+            
+        if (nextQuestionButton != null)
+            nextQuestionButton.interactable = MainNetwork.IsAdmin;
+            
+        if (endGameButton != null)
+            endGameButton.interactable = MainNetwork.IsAdmin;
     }
 
     public void ShowQuestion(Question currentQuestion)
@@ -76,5 +108,55 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
 
         // 4. fade back in
         yield return StartCoroutine(Fade(1f, 0f, 1f));
+    }
+    
+    /// <summary>
+    /// Show the results/answer screen where only admin can proceed to next question
+    /// </summary>
+    public void ShowResultsPanel(Question question, bool isCorrect)
+    {
+        if (resultPanel == null)
+            return;
+            
+        resultPanel.SetActive(true);
+        
+        // Update result information
+        TMP_Text resultText = resultPanel.GetComponentInChildren<TMP_Text>();
+        if (resultText != null)
+        {
+            resultText.text = isCorrect ? "✓ Correct Answer!" : "✗ Answer";
+            if (question != null)
+                resultText.text += "\n\n" + question.questionText;
+        }
+    }
+    
+    public void HideResultsPanel()
+    {
+        if (resultPanel != null)
+            resultPanel.SetActive(false);
+    }
+    
+    /// <summary>
+    /// Admin clicks this to proceed to next question
+    /// </summary>
+    public void AdminNextQuestion()
+    {
+        if (!MainNetwork.IsAdmin)
+            return;
+            
+        HideResultsPanel();
+        GameManager.Instance.AdminNextQuestion();
+    }
+    
+    /// <summary>
+    /// Admin clicks this to end the game
+    /// </summary>
+    public void AdminEndGame()
+    {
+        if (!MainNetwork.IsAdmin)
+            return;
+            
+        HideResultsPanel();
+        GameManager.Instance.AdminEndGame();
     }
 }

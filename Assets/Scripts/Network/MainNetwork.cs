@@ -11,6 +11,8 @@ public class MainNetwork : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     public static MainNetwork Instance;
 
+    public static bool IsAdmin { get; private set; }
+
     void Awake()
     {
         Instance = this;
@@ -29,6 +31,11 @@ public class MainNetwork : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom(){
         Debug.Log("Joined Room!");
         Debug.Log("Players in room: " + PhotonNetwork.PlayerList.Length);
+        
+        // First player in the room becomes admin
+        IsAdmin = PhotonNetwork.PlayerList.Length == 1;
+        
+        Debug.Log("IsAdmin: " + IsAdmin);
     }
 
     public void JoinOrCreateRoom(String roomName)

@@ -32,12 +32,20 @@ public class MainRoomUI : MonoBehaviourPunCallbacks
         roomListPanel.SetActive(false);
         notifPanel.SetActive(false);
         waitingRoomPanel.SetActive(true);
-        roomNameText.text = PhotonNetwork.CurrentRoom.Name;
+        if (roomNameText != null)
+            roomNameText.text = PhotonNetwork.CurrentRoom.Name;
         UpdatePlayerCount();
+        
+        // Update admin UI for waiting room
+        if (WaitingRoomUI.Instance != null)
+            WaitingRoomUI.Instance.UpdateAdminUI();
     }
 
     void UpdatePlayerCount()
 {
+        if (playerCountText == null)
+            return;
+        
     playerCountText.text =
         "Player(s) - "
         +

@@ -37,11 +37,44 @@ public class OnClickFunctions : MonoBehaviourPunCallbacks
     public void StartGame()
     {
         Debug.Log("Start Game clicked");
+        
+        if (!MainNetwork.IsAdmin)
+        {
+            UIManager.ShowNotification("Only admin can start the game!");
+            return;
+        }
+
+        GameManager.Instance.StartGameForAll();
     }
 
-    public void ExitGame()
+    public void EndGame()
     {
-        Application.Quit();
+        Debug.Log("End Game clicked");
+        
+        if (!MainNetwork.IsAdmin)
+        {
+            UIManager.ShowNotification("Only admin can end the game!");
+            return;
+        }
+
+        GameManager.Instance.AdminEndGame();
+        PhotonNetwork.LeaveRoom();
+    }
+
+    public void CloseRoom()
+    {
+        Debug.Log("Close Room clicked");
+        
+        if (!MainNetwork.IsAdmin)
+        {
+            UIManager.ShowNotification("Only admin can close the room!");
+            return;
+        }
+
+        if (PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.LeaveRoom();
+        }
     }
 
     public void CloseNotification()
