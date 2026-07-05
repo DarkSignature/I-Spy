@@ -13,7 +13,6 @@ public class MainRoomUI : MonoBehaviourPunCallbacks
     public TMP_Text notifMsg;
     public TMP_Text playerCountText;
     public static MainRoomUI Instance;
-
     void Awake()
     {
         Instance = this;
@@ -34,6 +33,7 @@ public class MainRoomUI : MonoBehaviourPunCallbacks
         waitingRoomPanel.SetActive(true);
         if (roomNameText != null)
             roomNameText.text = PhotonNetwork.CurrentRoom.Name;
+
         UpdatePlayerCount();
         
         // Update admin UI for waiting room
@@ -41,18 +41,28 @@ public class MainRoomUI : MonoBehaviourPunCallbacks
             WaitingRoomUI.Instance.UpdateAdminUI();
     }
 
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        UpdatePlayerCount();
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        UpdatePlayerCount();
+    }
+
     void UpdatePlayerCount()
-{
-        if (playerCountText == null)
-            return;
-        
-    playerCountText.text =
-        "Player(s) - "
-        +
-        (PhotonNetwork.CurrentRoom.PlayerCount - 1)
-        + " / " +
-        PhotonNetwork.CurrentRoom.MaxPlayers;
-}
+    {
+            if (playerCountText == null)
+                return;
+            
+        playerCountText.text =
+            "Player(s) - "
+            +
+            (PhotonNetwork.CurrentRoom.PlayerCount - 1)
+            + " / " +
+            "4";
+    }
     public void ShowNotification(string message)
     {
         notifMsg.text = message;

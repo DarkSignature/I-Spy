@@ -339,9 +339,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1331874608}
         m_TargetAssemblyTypeName: OnClickFunctions, Assembly-CSharp
-        m_MethodName: CreateRoom
+        m_MethodName: EnterGameScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2450,6 +2450,7 @@ GameObject:
   - component: {fileID: 1141783011}
   - component: {fileID: 1141783010}
   - component: {fileID: 1141783015}
+  - component: {fileID: 1141783016}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -2475,7 +2476,7 @@ MonoBehaviour:
   notifPanel: {fileID: 649364378}
   roomNameText: {fileID: 863761737}
   notifMsg: {fileID: 566053940}
-  playerCountText: {fileID: 0}
+  playerCountText: {fileID: 101651801}
 --- !u!65 &1141783011
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2577,6 +2578,28 @@ MonoBehaviour:
   active_rooms: 0
   roomCardPrefab: {fileID: 1408492884440045879, guid: 2a64b814df0008246b1a325b5520ac0b, type: 3}
   contentParent: {fileID: 371521274}
+--- !u!114 &1141783016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1141783009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1250809974
 GameObject:
   m_ObjectHideFlags: 0
@@ -2723,6 +2746,7 @@ GameObject:
   - component: {fileID: 1331874610}
   - component: {fileID: 1331874609}
   - component: {fileID: 1331874608}
+  - component: {fileID: 1331874613}
   m_Layer: 0
   m_Name: OnClickManager
   m_TagString: Untagged
@@ -2742,8 +2766,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f5eaeaa0a5b8e7448672c1579a95ad9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UIManager: {fileID: 1141783010}
-  NetworkManager: {fileID: 169627708}
   RoomManager: {fileID: 1141783015}
   RoomName: {fileID: 0}
 --- !u!65 &1331874609
@@ -2832,6 +2854,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1331874613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1331874607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 2
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1491747421
 GameObject:
   m_ObjectHideFlags: 0

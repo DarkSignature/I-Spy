@@ -13,6 +13,7 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
     public Button endGameButton;
     public Button startGameButton;
     public TMP_Text adminStatusText;
+    public TMP_Text playerCountText;
     
     public static WaitingRoomUI Instance;
      public Image fadeImage;
@@ -28,7 +29,7 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
     void Start()
     {
         revealPanel.SetActive(false);
-        waitingRoomPanel.SetActive(false);
+        waitingRoomPanel.SetActive(true);
         questionPanel.SetActive(true);
         
         if (resultPanel != null)
@@ -36,8 +37,30 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
         
         UpdateAdminUI();
     }
+
+    public override void OnJoinedRoom()
+    {
+        UpdatePlayerCount();
+        
+        // Update admin UI for waiting room
+        if (WaitingRoomUI.Instance != null)
+            WaitingRoomUI.Instance.UpdateAdminUI();
+    }
+
+    void UpdatePlayerCount()
+    {
+            if (playerCountText == null)
+                return;
+            
+        playerCountText.text =
+            "Player(s) - "
+            +
+            (PhotonNetwork.CurrentRoom.PlayerCount - 1)
+            + " / " +
+            PhotonNetwork.CurrentRoom.MaxPlayers;
+    }
     
-    void UpdateAdminUI()
+    public void UpdateAdminUI()
     {
         // Update admin status display
         if (adminStatusText != null)

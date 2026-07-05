@@ -17,5 +17,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Player/Main Room - Player.unity
     guid: c69e299ffccf2954bb9077ed23b1bf2a
+  - enabled: 1
+    path: Assets/Scenes/Player/Game Room - Player.unity
+    guid: 93ea42c704e94064ca7df6663a18d705
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 16cb3a087a7fe94418bd789ffc50e335, type: 2}

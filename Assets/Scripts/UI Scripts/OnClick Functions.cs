@@ -8,8 +8,6 @@ using UnityEngine.SceneManagement;
 
 public class OnClickFunctions : MonoBehaviourPunCallbacks
 {
-    public MainRoomUI UIManager;
-    public MainNetwork NetworkManager;
     public RoomListManager RoomManager;
     public TMP_Text RoomName;
     void Start()
@@ -21,7 +19,7 @@ public class OnClickFunctions : MonoBehaviourPunCallbacks
     {
         if(RoomManager.active_rooms >= 3)
         {
-            UIManager.ShowNotification("There is already 3 active rooms. Please wait for them to finish before creating a new one.");
+            MainRoomUI.Instance.ShowNotification("There is already 3 active rooms. Please wait for them to finish before creating a new one.");
             return;
         }
         Debug.Log("Create Room clicked");
@@ -31,7 +29,20 @@ public class OnClickFunctions : MonoBehaviourPunCallbacks
 
     public void ToggleRoomPanel()
     {
-        UIManager.ToggleRoomList();
+         MainRoomUI.Instance.ToggleRoomList();
+    }
+
+    public void EnterGameScene()
+    {
+        Debug.Log("Entering Scene...");
+
+        if (!MainNetwork.IsAdmin)
+        {
+             MainRoomUI.Instance.ShowNotification("Only admin can start the game room!");
+            return;
+        }
+
+        photonView.RPC("RPC_MoveToGameScene", RpcTarget.AllBuffered);
     }
 
     public void StartGame()
@@ -40,7 +51,7 @@ public class OnClickFunctions : MonoBehaviourPunCallbacks
         
         if (!MainNetwork.IsAdmin)
         {
-            UIManager.ShowNotification("Only admin can start the game!");
+            MainRoomUI.Instance.ShowNotification("Only admin can start the game!");
             return;
         }
 
@@ -53,7 +64,7 @@ public class OnClickFunctions : MonoBehaviourPunCallbacks
         
         if (!MainNetwork.IsAdmin)
         {
-            UIManager.ShowNotification("Only admin can end the game!");
+            MainRoomUI.Instance.ShowNotification("Only admin can end the game!");
             return;
         }
 
@@ -67,7 +78,7 @@ public class OnClickFunctions : MonoBehaviourPunCallbacks
         
         if (!MainNetwork.IsAdmin)
         {
-            UIManager.ShowNotification("Only admin can close the room!");
+            MainRoomUI.Instance.ShowNotification("Only admin can close the room!");
             return;
         }
 
@@ -79,13 +90,25 @@ public class OnClickFunctions : MonoBehaviourPunCallbacks
 
     public void CloseNotification()
     {
-        UIManager.CloseNotification();
+        MainRoomUI.Instance.CloseNotification();
         Debug.Log("Close Notif Clicked!");
     }
 
     public void JoinRoom()
     {
-        
         MainNetwork.Instance.JoinOrCreateRoom(RoomName.text);
+    }
+
+    [PunRPC]
+    public void RPC_MoveToGameScene()
+    {
+        if (!MainNetwork.IsAdmin)
+        {
+            PhotonNetwork.LoadLevel("Game Room - Player");
+        }
+        else
+        {
+            PhotonNetwork.LoadLevel("Waiting Room - Admin");
+        }
     }
 }

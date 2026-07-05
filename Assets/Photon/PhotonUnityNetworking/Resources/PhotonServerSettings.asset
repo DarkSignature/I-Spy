@@ -42,6 +42,11 @@ MonoBehaviour:
   - RPC_ChangeColor
   - RPC_addPlayer
   - RPC_updateScoreboard
+  - RPC_EndGame
+  - RPC_NextQuestion
+  - RPC_StartGame
+  - RPC_MoveToGameScene
+  - RPC_UpdatePlayerCount
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
