@@ -42,7 +42,7 @@ public class OnClickFunctions : MonoBehaviourPunCallbacks
             return;
         }
 
-        photonView.RPC("RPC_MoveToGameScene", RpcTarget.AllBuffered);
+        MainNetwork.Instance.photonView.RPC("RPC_MoveToGameScene", RpcTarget.All);
     }
 
     public void StartGame()
@@ -99,16 +99,4 @@ public class OnClickFunctions : MonoBehaviourPunCallbacks
         MainNetwork.Instance.JoinOrCreateRoom(RoomName.text);
     }
 
-    [PunRPC]
-    public void RPC_MoveToGameScene()
-    {
-        if (!MainNetwork.IsAdmin)
-        {
-            PhotonNetwork.LoadLevel("Game Room - Player");
-        }
-        else
-        {
-            PhotonNetwork.LoadLevel("Waiting Room - Admin");
-        }
-    }
 }

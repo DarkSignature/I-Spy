@@ -49,9 +49,29 @@ public class MainNetwork : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.JoinOrCreateRoom(roomName, new RoomOptions{ MaxPlayers = 5}, null);
     }
-    // Update is called once per frame
-    void Update()
+
+    [PunRPC]
+    public void RPC_MoveToGameScene()
     {
-        
+        if (!MainNetwork.IsAdmin)
+        {
+            PhotonNetwork.LoadLevel("Game Room - Player");
+        }
+        else
+        {
+            PhotonNetwork.LoadLevel("Waiting Room - Admin");
+        }
+    }
+
+    [PunRPC]
+    public void RPC_SetQuestion(int ID)
+    {
+        GameManager.Instance.currentQuestion =
+        QuestionManager.Instance.GetQuestionByID(ID);
+
+        if (GameManager.Instance.CurrentState == GameState.Animation)
+        {
+            GameManager.Instance.EnterAnimation(GameManager.Instance.currentQuestion);
+        }
     }
 }

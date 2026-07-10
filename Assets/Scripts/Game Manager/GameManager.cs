@@ -13,7 +13,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public static GameManager Instance;
 
     public GameState CurrentState;
-    private Question currentQuestion;
+    public int currentQuestionID;
+    public Question currentQuestion;
     private bool gameStarted = false;
 
     private void Awake()
@@ -36,8 +37,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         switch(newState)
         {
             case GameState.Animation:
-                currentQuestion = QuestionManager.Instance.GetRandomQuestion();
-                EnterAnimation(currentQuestion);
+                if (MainNetwork.IsAdmin)
+                {
+                    currentQuestionID = QuestionManager.Instance.GetRandomQuestionID();
+                    MainNetwork.Instance.photonView.RPC("RPC_SetQuestion", RpcTarget.All, currentQuestionID);
+                }
                 break;
 
             case GameState.Answering:
@@ -46,6 +50,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
             case GameState.Reveal:
                 EnterReveal();
+                currentQuestion = null;
                 break;
         }
     }
@@ -55,7 +60,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         SetState(GameState.Animation);
     }
 
-    private void EnterAnimation(Question currentQuestion)
+    public void EnterAnimation(Question currentQuestion)
     {
         Debug.Log("Playing Animation");
 
@@ -120,7 +125,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             return;
         }
 
-        photonView.RPC("RPC_StartGame", RpcTarget.AllBuffered);
+        photonView.RPC("RPC_StartGame", RpcTarget.All);
     }
 
     [PunRPC]
@@ -128,6 +133,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         if (!gameStarted)
         {
+            WaitingRoomUI.Instance.StartGameUI();
             gameStarted = true;
             Debug.Log("Game Started for all players!");
             StartRound();
@@ -145,7 +151,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             return;
         }
 
-        photonView.RPC("RPC_NextQuestion", RpcTarget.AllBuffered);
+        photonView.RPC("RPC_NextQuestion", RpcTarget.All);
     }
 
     [PunRPC]
@@ -169,7 +175,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
 
         gameStarted = false;
-        photonView.RPC("RPC_EndGame", RpcTarget.AllBuffered);
+        photonView.RPC("RPC_EndGame", RpcTarget.All);
     }
 
     [PunRPC]

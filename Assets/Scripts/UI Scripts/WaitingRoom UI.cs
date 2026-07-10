@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Realtime;
 using TMPro;
 using UnityEngine;
 using System.Collections;
@@ -36,6 +37,12 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
             resultPanel.SetActive(false);
         
         UpdateAdminUI();
+        UpdatePlayerCount();
+    }
+
+    public void StartGameUI()
+    {
+        waitingRoomPanel.SetActive(false);
     }
 
     public override void OnJoinedRoom()
@@ -57,7 +64,17 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
             +
             (PhotonNetwork.CurrentRoom.PlayerCount - 1)
             + " / " +
-            PhotonNetwork.CurrentRoom.MaxPlayers;
+            "4";
+    }
+
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        UpdatePlayerCount();
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        UpdatePlayerCount();
     }
     
     public void UpdateAdminUI()

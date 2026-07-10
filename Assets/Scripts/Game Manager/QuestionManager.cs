@@ -24,21 +24,28 @@ public class QuestionManager : MonoBehaviour
 
     public Question CurrentQuestion => currentQuestion;
 
-    public Question GetRandomQuestion()
+    public int GetRandomQuestionID()
     {
-        List<Question> available = questionBank.Where(q => !q.used).ToList();
+        List<Question> currAvailable = questionBank.Where(q => !q.used).ToList();
 
-        if(available.Count == 0)
+        if(currAvailable.Count == 0)
         {
             ResetQuestions();
-            available = questionBank;
+            currAvailable = questionBank;
         }
 
-        Question chosen = available[Random.Range(0, available.Count)];
+        int randIndex = Random.Range(0, currAvailable.Count);
+
+        Question chosen = currAvailable[randIndex];
 
         chosen.used = true;
 
-        return chosen;
+        return chosen.questionID;
+    }
+    
+    public Question GetQuestionByID(int id)
+    {
+        return questionBank.FirstOrDefault(q => q.questionID == id);
     }
 
     void ResetQuestions()
