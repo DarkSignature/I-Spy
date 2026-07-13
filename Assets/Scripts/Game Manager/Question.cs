@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class Question
 {
-
+    public int questionID;
     public string questionText;
 
     public int correctAnimalID;

@@ -42,4 +42,22 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log("Joined Room!");
         Debug.Log("Players in room: " + PhotonNetwork.PlayerList.Length);
     }
+
+    public void MoveToGameScene()
+    {
+        photonView.RPC("RPC_MoveToGameScene", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void RPC_MoveToGameScene()
+    {
+        if (!MainNetwork.IsAdmin)
+        {
+            PhotonNetwork.LoadLevel("Game Room - Player");
+        }
+        else
+        {
+            PhotonNetwork.LoadLevel("Waiting Room - Admin");
+        }
+    }
 }
