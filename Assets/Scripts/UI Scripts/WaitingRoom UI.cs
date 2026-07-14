@@ -56,9 +56,19 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
 
     void UpdatePlayerCount()
     {
-            if (playerCountText == null)
-                return;
+        // 1. Pastikan objek teks UI sudah dimasukkan di Inspector
+        if (playerCountText == null)
+            return;
             
+        // 2. Pengecekan krusial: Apakah pemain sudah ada di dalam Room?
+        if (PhotonNetwork.CurrentRoom == null)
+        {
+            // Jika belum masuk Room, beri nilai default saja
+            playerCountText.text = "Player(s) - 0 / 4"; 
+            return; // Hentikan eksekusi kode di sini agar tidak nabrak ke bawah
+        }
+
+        // 3. Jika aman dan sudah di dalam Room, hitung jumlah pemain aslinya
         playerCountText.text =
             "Player(s) - "
             +
