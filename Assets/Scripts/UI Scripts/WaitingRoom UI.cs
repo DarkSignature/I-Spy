@@ -21,7 +21,18 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
      public Animator animator;
      public GameObject question;
      public TMP_Text questionText;
-     
+
+    [Header("Answer Timer (Phase 6)")]
+    public GameObject timerPanel;
+    public TMP_Text timerText;
+    [Tooltip("Optional radial/bar image. Image Type must be set to Filled.")]
+    public Image timerFillImage;
+    public Color timerNormalColor = Color.white;
+    public Color timerWarningColor = Color.red;
+    [Tooltip("Timer turns to the warning color when this many seconds remain.")]
+    public float timerWarningThreshold = 3f;
+
+
     void Awake()
     {
         Instance = this;
@@ -35,7 +46,10 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
         
         if (resultPanel != null)
             resultPanel.SetActive(false);
-        
+
+        if (timerPanel != null)
+            timerPanel.SetActive(false);
+
         UpdateAdminUI();
         UpdatePlayerCount();
     }
@@ -75,6 +89,40 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         UpdatePlayerCount();
+    }
+
+    public void ShowTimer(float duration)
+    {
+        if (timerPanel != null)
+            timerPanel.SetActive(true);
+
+        UpdateTimer(duration, duration);
+    }
+
+    public void UpdateTimer(float remaining, float duration)
+    {
+        remaining = Mathf.Max(0f, remaining);
+
+        bool warning = remaining <= timerWarningThreshold;
+        Color color = warning ? timerWarningColor : timerNormalColor;
+
+        if (timerText != null)
+        {
+            timerText.text = Mathf.CeilToInt(remaining).ToString();
+            timerText.color = color;
+        }
+
+        if (timerFillImage != null)
+        {
+            timerFillImage.fillAmount = duration > 0f ? remaining / duration : 0f;
+            timerFillImage.color = color;
+        }
+    }
+
+    public void HideTimer()
+    {
+        if (timerPanel != null)
+            timerPanel.SetActive(false);
     }
     
     public void UpdateAdminUI()
