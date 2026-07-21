@@ -24,6 +24,6 @@ public class RoomCard : MonoBehaviour
         playerCountText.text =
             room.PlayerCount - 1 +
             "/" +
-            room.MaxPlayers;
+            (room.MaxPlayers - 1);
     }
 }

@@ -3233,6 +3233,12 @@ MonoBehaviour:
   animator: {fileID: 303259186}
   question: {fileID: 73864513}
   questionText: {fileID: 533742033}
+  timerPanel: {fileID: 0}
+  timerText: {fileID: 0}
+  timerFillImage: {fileID: 0}
+  timerNormalColor: {r: 1, g: 1, b: 1, a: 1}
+  timerWarningColor: {r: 1, g: 0, b: 0, a: 1}
+  timerWarningThreshold: 3
 --- !u!65 &1784312780
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3630,19 +3636,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1bfbe600b798cb42b614401a27bcedf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  questionBank:
-  - questionID: 0
-    questionText: What animal lays eggs?
-    correctAnimalID: 0
-    used: 0
-  - questionID: 1
-    questionText: What animal is the fastest?
-    correctAnimalID: 0
-    used: 0
-  - questionID: 2
-    questionText: What animal hunts in the night?
-    correctAnimalID: 0
-    used: 0
+  questionBank: []
 --- !u!114 &1998104788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3662,6 +3656,9 @@ MonoBehaviour:
     questionText: 
     correctAnimalID: 0
     used: 0
+  spawnPoints: []
+  distractorCount: 3
+  answerDuration: 10
 --- !u!65 &1998104789
 BoxCollider:
   m_ObjectHideFlags: 0

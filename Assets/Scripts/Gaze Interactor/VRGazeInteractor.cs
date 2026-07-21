@@ -18,7 +18,7 @@ public class VRGazeInteractor : MonoBehaviour
         
         if(Physics.Raycast(ray, out hit))
         {
-            Debug.Log(hit.collider.name);
+            // Debug.Log(hit.collider.name);
             GazeInteractable interactable =
                 hit.collider.GetComponent<GazeInteractable>();
 
