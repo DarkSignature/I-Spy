@@ -18,7 +18,10 @@ public class GazeButton : GazeInteractable
 
     public override void OnGazeEnter()
     {
-        Debug.Log("Gaze Entered");
+        // Disabled buttons don't react to gaze at all
+        if (button != null && !button.interactable)
+            return;
+
         outline.enabled = true;
     }
 
@@ -29,6 +32,10 @@ public class GazeButton : GazeInteractable
 
     public override void OnGazeComplete()
     {
+        // onClick.Invoke() bypasses interactable, so guard it here
+        if (button != null && !button.interactable)
+            return;
+
         button.onClick.Invoke();
     }
 

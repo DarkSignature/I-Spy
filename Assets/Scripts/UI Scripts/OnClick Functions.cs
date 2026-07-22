@@ -30,6 +30,13 @@ public class OnClickFunctions : MonoBehaviourPunCallbacks
     public void ToggleRoomPanel()
     {
          MainRoomUI.Instance.ToggleRoomList();
+
+        // Opening the list? Force a fresh full room list from Photon so
+        // stale rooms from earlier sessions never linger on screen.
+        if (MainRoomUI.Instance.roomListPanel.activeSelf)
+        {
+            MainNetwork.Instance.RefreshRoomList();
+        }
     }
 
     public void EnterGameScene()
@@ -96,7 +103,17 @@ public class OnClickFunctions : MonoBehaviourPunCallbacks
 
     public void JoinRoom()
     {
-        MainNetwork.Instance.JoinOrCreateRoom(RoomName.text);
+        // On a room card this component sits next to RoomCard - join using
+        // its stored room name instead of the displayed UI text.
+        RoomCard card = GetComponent<RoomCard>();
+
+        if (card != null)
+        {
+            card.JoinThisRoom();
+            return;
+        }
+
+        MainNetwork.Instance.JoinRoom(RoomName.text.Trim());
     }
 
 }

@@ -23,3 +23,6 @@ MemoryCaptures/
 # OS generated
 .DS_Store
 Thumbs.db
+
+# Downloaded archives (e.g. OmniRoute releases) don't belong in the repo
+/*.zip

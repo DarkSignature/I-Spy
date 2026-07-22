@@ -28,6 +28,15 @@ public class GameManager : MonoBehaviourPunCallbacks
     [Tooltip("How long players have to answer, in seconds.")]
     [SerializeField, Min(1f)] private float answerDuration = 10f;
 
+    [Header("Rounds & Leaderboard (Phase 7)")]
+    [Tooltip("How many rounds a match lasts before the leaderboard is shown.")]
+    [SerializeField, Min(1)] private int totalRounds = 5;
+
+    [Tooltip("Points awarded per correct answer.")]
+    [SerializeField, Min(1)] private int pointsPerCorrect = 1;
+
+    private int currentRoundNumber = 0;
+
     /// <summary>Seconds left in the current Answering phase (0 when not answering).</summary>
     public float TimeRemaining { get; private set; }
 
@@ -63,7 +72,12 @@ public class GameManager : MonoBehaviourPunCallbacks
                 if (MainNetwork.IsAdmin)
                 {
                     currentQuestionID = QuestionManager.Instance.GetRandomQuestionID();
-                    MainNetwork.Instance.photonView.RPC("RPC_SetQuestion", RpcTarget.All, currentQuestionID);
+
+                    // Seed keeps the animal spawn shuffle identical on every client
+                    int shuffleSeed = Random.Range(int.MinValue, int.MaxValue);
+
+                    MainNetwork.Instance.photonView.RPC(
+                        "RPC_SetQuestion", RpcTarget.All, currentQuestionID, shuffleSeed);
                 }
                 break;
 
@@ -75,11 +89,17 @@ public class GameManager : MonoBehaviourPunCallbacks
                 EnterReveal();
                 currentQuestion = null;
                 break;
+
+            case GameState.Leaderboard:
+                EnterLeaderboard();
+                break;
         }
     }
 
     public void StartRound()
     {
+        currentRoundNumber++;
+        Debug.Log($"Starting round {currentRoundNumber} of {totalRounds}");
         SetState(GameState.Animation);
     }
 
@@ -164,6 +184,10 @@ public class GameManager : MonoBehaviourPunCallbacks
         bool isCorrect = SelectionManager.Instance != null &&
                          SelectionManager.Instance.IsPlayerCorrect(currentQuestion);
 
+        // Each client scores its own local player — admins skip (they run the game, they don't play)
+        if (ScoreManager.Instance != null && !MainNetwork.IsAdmin)
+            ScoreManager.Instance.AwardPointsIfCorrect(isCorrect, pointsPerCorrect);
+
         // Highlight the correct animal so every player sees the answer
         foreach (Animal animal in spawnedAnimals)
         {
@@ -183,11 +207,25 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void EndRound()
     {
-        Debug.Log("Round End");
+        Debug.Log($"Round {currentRoundNumber} of {totalRounds} ended");
 
         CleanupRound();
 
+        if (currentRoundNumber >= totalRounds)
+        {
+            SetState(GameState.Leaderboard);
+            return;
+        }
+
         StartRound();
+    }
+
+    private void EnterLeaderboard()
+    {
+        Debug.Log("All rounds finished - showing leaderboard");
+
+        if (WaitingRoomUI.Instance != null)
+            WaitingRoomUI.Instance.ShowLeaderboard();
     }
 
     /// <summary>
@@ -283,11 +321,23 @@ public class GameManager : MonoBehaviourPunCallbacks
         DespawnAnimals();
     }
 
-    private static void Shuffle<T>(List<T> list)
+    private System.Random shuffleRng;
+
+    /// <summary>Called from RPC_SetQuestion so all clients shuffle identically this round.</summary>
+    public void SetShuffleSeed(int seed)
     {
+        shuffleRng = new System.Random(seed);
+    }
+
+    private void Shuffle<T>(List<T> list)
+    {
+        // Seeded rng keeps placement in sync across clients; falls back to
+        // an unseeded one if a round ever starts without a synced seed.
+        shuffleRng ??= new System.Random();
+
         for (int i = list.Count - 1; i > 0; i--)
         {
-            int j = Random.Range(0, i + 1);
+            int j = shuffleRng.Next(0, i + 1);
             (list[i], list[j]) = (list[j], list[i]);
         }
     }
@@ -319,6 +369,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             WaitingRoomUI.Instance.StartGameUI();
             gameStarted = true;
+            currentRoundNumber = 0;
+
+            // Fresh match starts with everyone at zero
+            if (ScoreManager.Instance != null)
+                ScoreManager.Instance.ResetAllScores();
+
             Debug.Log("Game Started for all players!");
             StartRound();
         }
@@ -367,8 +423,13 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("Game Ended!");
         gameStarted = false;
+        currentRoundNumber = 0;
         CancelInvoke(); // Cancel all pending invokes
         CleanupRound();
+
+        if (WaitingRoomUI.Instance != null)
+            WaitingRoomUI.Instance.HideLeaderboard();
+
         // Return to waiting room - you can customize this behavior
         CurrentState = GameState.Waiting;
     }
