@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     /// <summary>Seconds left in the current Answering phase (0 when not answering).</summary>
     public float TimeRemaining { get; private set; }
+    public int NumberofRounds = 3;
+    public int curRoundNumber = 1;
 
     private Coroutine answerTimerRoutine;
 
@@ -74,7 +76,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
             case GameState.Reveal:
                 EnterReveal();
-                currentQuestion = null;
                 break;
         }
     }
@@ -165,17 +166,21 @@ public class GameManager : MonoBehaviourPunCallbacks
         bool isCorrect = SelectionManager.Instance != null &&
                          SelectionManager.Instance.IsPlayerCorrect(currentQuestion);
 
+        Animal correctAnimal = null;
+
         // Highlight the correct animal so every player sees the answer
         foreach (Animal animal in spawnedAnimals)
         {
-            if (animal != null && animal.IsCorrectAnswer)
+            if (animal != null && animal.IsCorrectAnswer){
+                correctAnimal = animal;
                 animal.RevealAsCorrect();
+            }
         }
 
         // Show results panel
         if (WaitingRoomUI.Instance != null)
         {
-            WaitingRoomUI.Instance.ShowResultsPanel(currentQuestion, isCorrect);
+            WaitingRoomUI.Instance.ShowResultsPanel(currentQuestion, isCorrect, correctAnimal);
         }
 
         // Don't automatically end the round - wait for admin to click next
@@ -185,6 +190,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void EndRound()
     {
         Debug.Log("Round End");
+        curRoundNumber++;
+        if(curRoundNumber > NumberofRounds){
+            WaitingRoomUI.Instance.AdminEndGame();
+            return;
+        }
 
         CleanupRound();
 
@@ -278,9 +288,12 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void CleanupRound()
     {
         StopAnswerTimer();
-
+        currentQuestion = null;
+        
         if (SelectionManager.Instance != null)
             SelectionManager.Instance.ClearSelection();
+
+        WaitingRoomUI.Instance.HideResultsPanel();
 
         DespawnAnimals();
     }
@@ -371,7 +384,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         gameStarted = false;
         CancelInvoke(); // Cancel all pending invokes
         CleanupRound();
+        WaitingRoomUI.Instance.ResetGame();
         // Return to waiting room - you can customize this behavior
-        CurrentState = GameState.Waiting;
+        SetState(GameState.Waiting);
     }
 }

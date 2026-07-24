@@ -21,6 +21,7 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
      public Animator animator;
      public GameObject question;
      public TMP_Text questionText;
+     public TMP_Text questionNumber;
 
     [Header("Answer Timer (Phase 6)")]
     public GameObject timerPanel;
@@ -32,6 +33,10 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
     [Tooltip("Timer turns to the warning color when this many seconds remain.")]
     public float timerWarningThreshold = 3f;
 
+    // Result Page
+    public TMP_Text correctText;
+    public TMP_Text correctAnimal;
+    public TMP_Text correctDescription;
 
     void Awake()
     {
@@ -93,6 +98,7 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
 
     public void ShowTimer(float duration)
     {
+        timerText.text = duration.ToString();
         if (timerPanel != null)
             timerPanel.SetActive(true);
 
@@ -145,7 +151,8 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
     }
 
     public void ShowQuestion(Question currentQuestion)
-    {
+    {   
+        questionNumber.text = "Q" + GameManager.Instance.curRoundNumber;
         questionText.text = currentQuestion.questionText;
         StartCoroutine(ShowQuestionRoutine());
     }
@@ -187,7 +194,11 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
             yield return null;
         }
 
-        animator.Play("QuestionPopup", 0, 0f);
+        if(!MainNetwork.IsAdmin){
+            animator.Play("QuestionPopup", 0, 0f);
+        }else{
+            animator.Play("QuestionPopupAdmin", 0, 0f);
+        }
 
         yield return null;
 
@@ -201,7 +212,7 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
     /// <summary>
     /// Show the results/answer screen where only admin can proceed to next question
     /// </summary>
-    public void ShowResultsPanel(Question question, bool isCorrect)
+    public void ShowResultsPanel(Question question, bool isCorrect, Animal animal)
     {
         if (resultPanel == null)
             return;
@@ -209,12 +220,14 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
         resultPanel.SetActive(true);
         
         // Update result information
-        TMP_Text resultText = resultPanel.GetComponentInChildren<TMP_Text>();
-        if (resultText != null)
+        if (correctText != null)
         {
-            resultText.text = isCorrect ? "✓ Correct Answer!" : "✗ Answer";
-            if (question != null)
-                resultText.text += "\n\n" + question.questionText;
+            // Debug.Log(correctAnimal);
+            // Debug.Log(animal);
+            // Debug.Log(animal.animalName);
+            correctText.text = isCorrect || MainNetwork.IsAdmin ? "✓ Correct Answer!" : "✗ Answer";
+            correctAnimal.text = animal.animalName;
+            correctDescription.text = question.questionDescription;
         }
     }
     
@@ -222,6 +235,12 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
     {
         if (resultPanel != null)
             resultPanel.SetActive(false);
+    }
+
+    public void HideQuestionPanel(){
+        if (question != null){
+            question.SetActive(false);
+        }
     }
     
     /// <summary>
@@ -231,7 +250,7 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
     {
         if (!MainNetwork.IsAdmin)
             return;
-            
+        HideQuestionPanel();
         HideResultsPanel();
         GameManager.Instance.AdminNextQuestion();
     }
@@ -243,8 +262,12 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
     {
         if (!MainNetwork.IsAdmin)
             return;
-            
-        HideResultsPanel();
         GameManager.Instance.AdminEndGame();
+    }
+
+    public void ResetGame(){
+        HideQuestionPanel();
+        HideResultsPanel();
+        waitingRoomPanel.SetActive(true);
     }
 }

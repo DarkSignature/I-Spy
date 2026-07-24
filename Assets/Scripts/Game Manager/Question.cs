@@ -9,7 +9,7 @@ public class Question
     public string questionText;
 
     public int correctAnimalID;
-
+    public string questionDescription;
     public bool used;
 
     // Future additions

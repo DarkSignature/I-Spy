@@ -74,4 +74,10 @@ public class MainNetwork : MonoBehaviourPunCallbacks
             GameManager.Instance.EnterAnimation(GameManager.Instance.currentQuestion);
         }
     }
+
+    [PunRPC]
+    public void RPC_NextQuestion()
+    {
+        GameManager.Instance.EndRound();
+    }
 }

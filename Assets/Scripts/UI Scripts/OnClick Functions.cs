@@ -99,4 +99,8 @@ public class OnClickFunctions : MonoBehaviourPunCallbacks
         MainNetwork.Instance.JoinOrCreateRoom(RoomName.text);
     }
 
+    public void NextRound(){
+        WaitingRoomUI.Instance.AdminNextQuestion();
+    }
+
 }
