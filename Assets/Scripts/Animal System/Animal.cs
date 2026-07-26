@@ -16,7 +16,6 @@ public class Animal : GazeInteractable
     [SerializeField] private Color gazeHighlightColor = Color.white;
     [SerializeField] private Color selectedHighlightColor = Color.yellow;
     [SerializeField] private Color correctRevealColor = Color.green;
-    [SerializeField] private float outlineWidth = 6f;
 
     [Tooltip("Optional child object (e.g. a ring under the animal) shown while this animal is the player's current answer.")]
     [SerializeField] private GameObject selectionRingIndicator;
@@ -34,7 +33,6 @@ public class Animal : GazeInteractable
         {
             Outline added = gameObject.AddComponent<Outline>();
             added.OutlineMode = Outline.Mode.OutlineAll;
-            added.OutlineWidth = outlineWidth;
         }
 
         base.Start();

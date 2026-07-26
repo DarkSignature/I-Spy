@@ -124,8 +124,8 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
 
         // Skip the admin - they run the game and don't have a score
         ranked.RemoveAll(p => p.CustomProperties != null &&
-                              p.CustomProperties.ContainsKey("isAdmin") &&
-                              (bool)p.CustomProperties["isAdmin"]);
+                            p.CustomProperties.ContainsKey("isAdmin") &&
+                            (bool)p.CustomProperties["isAdmin"]);
 
         for (int i = 0; i < leaderboardRows.Length; i++)
         {
@@ -150,6 +150,13 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
 
                 if (row.scoreText != null)
                     row.scoreText.text = ScoreManager.Instance.GetScore(player).ToString();
+
+                // Highlight the local player's row
+                Color textColor = player == PhotonNetwork.LocalPlayer ? Color.yellow : Color.white;
+
+                if (row.rankText != null) row.rankText.color = textColor;
+                if (row.nameText != null) row.nameText.color = textColor;
+                if (row.scoreText != null) row.scoreText.color = textColor;
             }
             else
             {
@@ -294,7 +301,7 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
         }
 
         if(!MainNetwork.IsAdmin){
-            animator.Play("QuestionPopup", 0, 0f);
+            animator.Play("NewQuestionPopup", 0, 0f);
         }else{
             animator.Play("QuestionPopupAdmin", 0, 0f);
         }

@@ -6,20 +6,30 @@ public class GazeInteractable : MonoBehaviour
 {
     protected Outline outline;
 
+    [SerializeField]
+    protected float outlineWidth = 10f;   // Adjust in Inspector
+
     protected virtual void Start()
     {
         outline = GetComponent<Outline>();
-        outline.enabled = false;
+
+        if (outline != null)
+        {
+            outline.OutlineWidth = outlineWidth;
+            outline.enabled = false;
+        }
     }
 
     public virtual void OnGazeEnter()
     {
-        outline.enabled = true;
+        if (outline != null)
+            outline.enabled = true;
     }
 
     public virtual void OnGazeExit()
     {
-        outline.enabled = false;
+        if (outline != null)
+            outline.enabled = false;
     }
 
     public virtual void OnGazeComplete()
@@ -32,4 +42,3 @@ public class GazeInteractable : MonoBehaviour
         return 2f;
     }
 }
-
