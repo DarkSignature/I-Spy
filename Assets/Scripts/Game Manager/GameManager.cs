@@ -28,6 +28,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     [Tooltip("How long players have to answer, in seconds.")]
     [SerializeField, Min(1f)] private float answerDuration = 10f;
 
+    [Tooltip("Points awarded per correct answer.")]
+    [SerializeField, Min(1)] private int pointsPerCorrect = 1;
+
     /// <summary>Seconds left in the current Answering phase (0 when not answering).</summary>
     public float TimeRemaining { get; private set; }
     public int NumberofRounds = 3;
@@ -66,7 +69,10 @@ public class GameManager : MonoBehaviourPunCallbacks
                 if (MainNetwork.IsAdmin)
                 {
                     currentQuestionID = QuestionManager.Instance.GetRandomQuestionID();
-                    MainNetwork.Instance.photonView.RPC("RPC_SetQuestion", RpcTarget.All, currentQuestionID);
+                    // Seed keeps the animal spawn shuffle identical on every client
+                    int shuffleSeed = Random.Range(int.MinValue, int.MaxValue);
+                    
+                    MainNetwork.Instance.photonView.RPC("RPC_SetQuestion", RpcTarget.All, currentQuestionID, shuffleSeed);
                 }
                 break;
 
@@ -76,6 +82,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
             case GameState.Reveal:
                 EnterReveal();
+                break;
+
+            case GameState.Leaderboard:
+                EnterLeaderboard();
                 break;
         }
     }
@@ -168,6 +178,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         Animal correctAnimal = null;
 
+        if (ScoreManager.Instance != null && !MainNetwork.IsAdmin)
+            ScoreManager.Instance.AwardPointsIfCorrect(isCorrect, pointsPerCorrect);
+
         // Highlight the correct animal so every player sees the answer
         foreach (Animal animal in spawnedAnimals)
         {
@@ -180,6 +193,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         // Show results panel
         if (WaitingRoomUI.Instance != null)
         {
+            WaitingRoomUI.Instance.ShowLeaderboard();
             WaitingRoomUI.Instance.ShowResultsPanel(currentQuestion, isCorrect, correctAnimal);
         }
 
@@ -199,6 +213,14 @@ public class GameManager : MonoBehaviourPunCallbacks
         CleanupRound();
 
         StartRound();
+    }
+
+    private void EnterLeaderboard()
+    {
+        Debug.Log("All rounds finished - showing leaderboard");
+
+        if (WaitingRoomUI.Instance != null)
+            WaitingRoomUI.Instance.ShowLeaderboard();
     }
 
     /// <summary>
@@ -298,11 +320,23 @@ public class GameManager : MonoBehaviourPunCallbacks
         DespawnAnimals();
     }
 
-    private static void Shuffle<T>(List<T> list)
+    private System.Random shuffleRng;
+
+    /// <summary>Called from RPC_SetQuestion so all clients shuffle identically this round.</summary>
+    public void SetShuffleSeed(int seed)
     {
+        shuffleRng = new System.Random(seed);
+    }
+
+    private void Shuffle<T>(List<T> list)
+    {
+        // Seeded rng keeps placement in sync across clients; falls back to
+        // an unseeded one if a round ever starts without a synced seed.
+        shuffleRng ??= new System.Random();
+
         for (int i = list.Count - 1; i > 0; i--)
         {
-            int j = Random.Range(0, i + 1);
+            int j = shuffleRng.Next(0, i + 1);
             (list[i], list[j]) = (list[j], list[i]);
         }
     }
@@ -334,6 +368,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             WaitingRoomUI.Instance.StartGameUI();
             gameStarted = true;
+            curRoundNumber = 1;
+            // Fresh match starts with everyone at zero
+            if (ScoreManager.Instance != null)
+                ScoreManager.Instance.ResetAllScores();
+
             Debug.Log("Game Started for all players!");
             StartRound();
         }
@@ -358,6 +397,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         // Called when admin clicks next on result screen
         // This will move to the next question
+        WaitingRoomUI.Instance.HideQuestionPanel();
+        WaitingRoomUI.Instance.HideResultsPanel();
         CancelInvoke(nameof(EndRound)); // Cancel the automatic end round if still pending
         EndRound();
     }

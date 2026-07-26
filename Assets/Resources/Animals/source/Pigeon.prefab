@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 2495162575125265800}
   - component: {fileID: 7934082657306441234}
   - component: {fileID: 6600419493348748077}
-  m_Layer: 0
+  - component: {fileID: -4411169468534347206}
+  m_Layer: 5
   m_Name: Pigeon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,3 +104,24 @@ MonoBehaviour:
   correctRevealColor: {r: 0, g: 1, b: 0, a: 1}
   outlineWidth: 6
   selectionRingIndicator: {fileID: 0}
+--- !u!65 &-4411169468534347206
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4034637539244353945}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.5163239, y: 0.7068153, z: 0.5312932}
+  m_Center: {x: 0, y: 0.35340765, z: 0}

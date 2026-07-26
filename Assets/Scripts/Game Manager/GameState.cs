@@ -4,5 +4,6 @@ public enum GameState{
     Animation,
     Answering,
     Reveal,
+    Leaderboard,
     Finished
 }

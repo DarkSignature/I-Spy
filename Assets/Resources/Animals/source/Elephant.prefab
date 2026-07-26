@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 4369507581172211602}
   - component: {fileID: 7839842227005637776}
   - component: {fileID: 5622391206583956641}
-  m_Layer: 0
+  - component: {fileID: -5625710296147156896}
+  m_Layer: 5
   m_Name: Elephant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,3 +104,24 @@ MonoBehaviour:
   correctRevealColor: {r: 0, g: 1, b: 0, a: 1}
   outlineWidth: 6
   selectionRingIndicator: {fileID: 0}
+--- !u!65 &-5625710296147156896
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8817911167318846082}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.7448263, y: 1.6737051, z: 1.4307084}
+  m_Center: {x: 0, y: 0.83685255, z: 0}

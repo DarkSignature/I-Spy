@@ -48,15 +48,15 @@ public class QuestionManager : MonoBehaviour
             },
             new Question
             {
-                questionID = 3,
-                correctAnimalID = 3,
+                questionID = 4,
+                correctAnimalID = 4,
                 questionText = "Aku sering disebut sebagai 'Raja Hutan' dan memiliki rambut lebat di sekitar kepalaku. Siapakah aku?",
                 questionDescription = "Singa dikenal sebagai raja hutan dan hidup berkelompok."
             },
             new Question
             {
-                questionID = 4,
-                correctAnimalID = 4,
+                questionID = 3,
+                correctAnimalID = 3,
                 questionText = "Aku adalah hewan berkaki empat yang sangat cepat berlari dan sering membantu manusia menarik delman. Siapakah aku?",
                 questionDescription = "Kuda adalah hewan kuat yang dapat berlari sangat cepat."
             },

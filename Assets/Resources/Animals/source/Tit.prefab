@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 7835805253610059237}
   - component: {fileID: 1951278432617403103}
   - component: {fileID: -9057823732852369446}
-  m_Layer: 0
+  - component: {fileID: 1620845282988232373}
+  m_Layer: 5
   m_Name: Tit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,3 +104,24 @@ MonoBehaviour:
   correctRevealColor: {r: 0, g: 1, b: 0, a: 1}
   outlineWidth: 6
   selectionRingIndicator: {fileID: 0}
+--- !u!65 &1620845282988232373
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 15630868612393508}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.32198212, y: 0.5629905, z: 0.4284387}
+  m_Center: {x: 0, y: 0.28149524, z: 0}

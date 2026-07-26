@@ -33,10 +33,25 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
     [Tooltip("Timer turns to the warning color when this many seconds remain.")]
     public float timerWarningThreshold = 3f;
 
-    // Result Page
+    [Header("Result Scene")]
     public TMP_Text correctText;
     public TMP_Text correctAnimal;
     public TMP_Text correctDescription;
+
+    [Header("Leaderboard (Phase 7)")]
+    public GameObject leaderboardPanel;
+    [Tooltip("Exactly 4 rows in top-to-bottom order (rank 1..4). Each row's children: 0=rank, 1=name, 2=score (all TMP_Text).")]
+    public LeaderboardRow[] leaderboardRows;
+    public Button leaderboardCloseButton;
+
+    [System.Serializable]
+    public class LeaderboardRow
+    {
+        public GameObject rowObject;
+        public TMP_Text rankText;
+        public TMP_Text nameText;
+        public TMP_Text scoreText;
+    }
 
     void Awake()
     {
@@ -55,8 +70,92 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
         if (timerPanel != null)
             timerPanel.SetActive(false);
 
+        if (leaderboardPanel != null)
+            leaderboardPanel.SetActive(false);
+
         UpdateAdminUI();
         UpdatePlayerCount();
+    }
+
+    public void ShowLeaderboard()
+    {
+        // if (leaderboardPanel == null)
+        // {
+        //     Debug.LogWarning("Leaderboard panel not assigned - cannot show leaderboard!");
+        //     return;
+        // }
+
+        // // Hide any lingering round UI so leaderboard has the screen
+        // if (resultPanel != null) resultPanel.SetActive(false);
+        // if (timerPanel != null) timerPanel.SetActive(false);
+        // if (questionPanel != null) questionPanel.SetActive(false);
+        // if (revealPanel != null) revealPanel.SetActive(false);
+
+        // leaderboardPanel.SetActive(true);
+        RefreshLeaderboard();
+
+        // Only admin can dismiss / end the match from the leaderboard
+        if (leaderboardCloseButton != null)
+            leaderboardCloseButton.gameObject.SetActive(MainNetwork.IsAdmin);
+
+        // Re-render if any late score update arrives (e.g. player disconnect)
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.OnScoresChanged -= RefreshLeaderboard;
+            ScoreManager.Instance.OnScoresChanged += RefreshLeaderboard;
+        }
+    }
+
+    public void HideLeaderboard()
+    {
+        if (leaderboardPanel != null)
+            leaderboardPanel.SetActive(false);
+
+        if (ScoreManager.Instance != null)
+            ScoreManager.Instance.OnScoresChanged -= RefreshLeaderboard;
+    }
+
+    private void RefreshLeaderboard()
+    {
+        if (leaderboardRows == null || leaderboardRows.Length == 0 || ScoreManager.Instance == null)
+            return;
+
+        System.Collections.Generic.List<Player> ranked = ScoreManager.Instance.GetLeaderboard();
+
+        // Skip the admin - they run the game and don't have a score
+        ranked.RemoveAll(p => p.CustomProperties != null &&
+                              p.CustomProperties.ContainsKey("isAdmin") &&
+                              (bool)p.CustomProperties["isAdmin"]);
+
+        for (int i = 0; i < leaderboardRows.Length; i++)
+        {
+            LeaderboardRow row = leaderboardRows[i];
+            if (row == null || row.rowObject == null)
+                continue;
+
+            if (i < ranked.Count)
+            {
+                Player player = ranked[i];
+                row.rowObject.SetActive(true);
+
+                if (row.rankText != null) row.rankText.text = "#" + (i + 1);
+
+                if (row.nameText != null)
+                {
+                    string name = string.IsNullOrEmpty(player.NickName)
+                        ? "Player " + player.ActorNumber
+                        : player.NickName;
+                    row.nameText.text = name;
+                }
+
+                if (row.scoreText != null)
+                    row.scoreText.text = ScoreManager.Instance.GetScore(player).ToString();
+            }
+            else
+            {
+                row.rowObject.SetActive(false);
+            }
+        }
     }
 
     public void StartGameUI()
@@ -250,8 +349,6 @@ public class WaitingRoomUI : MonoBehaviourPunCallbacks
     {
         if (!MainNetwork.IsAdmin)
             return;
-        HideQuestionPanel();
-        HideResultsPanel();
         GameManager.Instance.AdminNextQuestion();
     }
     

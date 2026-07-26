@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 3502547318659721795}
   - component: {fileID: 7823561572866252204}
   - component: {fileID: -5901270112176629577}
-  m_Layer: 0
+  - component: {fileID: 5220248366888212161}
+  m_Layer: 5
   m_Name: Horse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,3 +104,24 @@ MonoBehaviour:
   correctRevealColor: {r: 0, g: 1, b: 0, a: 1}
   outlineWidth: 6
   selectionRingIndicator: {fileID: 0}
+--- !u!65 &5220248366888212161
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1368232614007416677}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.0529084, y: 1.1887304, z: 0.71365744}
+  m_Center: {x: 0, y: 0.5943652, z: 0}

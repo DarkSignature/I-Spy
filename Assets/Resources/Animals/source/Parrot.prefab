@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 2762172718357788604}
   - component: {fileID: 4911798330537285664}
   - component: {fileID: 3530125959029126064}
-  m_Layer: 0
+  - component: {fileID: -5460545189386664080}
+  m_Layer: 5
   m_Name: Parrot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,3 +104,24 @@ MonoBehaviour:
   correctRevealColor: {r: 0, g: 1, b: 0, a: 1}
   outlineWidth: 6
   selectionRingIndicator: {fileID: 0}
+--- !u!65 &-5460545189386664080
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747367001043021288}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.36606008, y: 0.6148786, z: 0.4088213}
+  m_Center: {x: 0, y: 0.3074393, z: 0}

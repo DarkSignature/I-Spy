@@ -63,6 +63,7 @@ public class Animal : GazeInteractable
 
     public override void OnGazeComplete()
     {
+        Debug.Log(this.animalName);
         // Dwell-select for VR gaze. Instant click/submit selection is
         // handled by SelectionManager.Update while this animal is gazed.
         if (SelectionManager.Instance != null)
